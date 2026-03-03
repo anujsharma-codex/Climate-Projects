@@ -1,14 +1,10 @@
-
-Climate projects readme · MD
-Copy
-
 # Climate Projects
 
 This is my applied project portfolio in **climate physical risk intelligence** — a field at the intersection of atmospheric physics, data science, and risk assessment.
 
 Every project here is built to solve a real climate data problem. Each one represents the applied output of a learning stage — not toy examples, but domain-specific systems that get progressively more sophisticated as the technical stack grows.
 
-The learning record behind these projects lives in → **[climate-ds-foundations](https://github.com/anujsharma-codex/Climate-Data-Science-Learning-Record)**
+The learning record behind these projects lives in → **[Climate-Data-Science-Learning-Record](https://github.com/anujsharma-codex/Climate-Data-Science-Learning-Record)**
 
 ---
 
@@ -94,4 +90,4 @@ The target roles this portfolio builds toward: Climate Data Scientist, Renewable
 
 I'm building domain-specific data science skills with a clear target: climate physical risk intelligence. Every project is chosen to solve a real problem in the field and to demonstrate a progressively more sophisticated technical stack — from pure Python to physics-aware ML systems in production.
 
-Learning record and foundations → **[climate-ds-foundations](https://github.com/anujsharma-codex/Climate-Data-Science-Learning-Record)**
+Learning record and foundations → **[Climate-Data-Science-Learning-Record](https://github.com/anujsharma-codex/Climate-Data-Science-Learning-Record)**
