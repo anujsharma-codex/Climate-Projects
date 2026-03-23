@@ -10,14 +10,14 @@ The learning record behind these projects lives in → **[Climate-Data-Science-L
 
 ## Projects
 
-### `01_SOLAR_POTENTIAL_CALCULATOR/` — v1.0 ✅
-**Stack:** Pure Python, OOP, no external libraries
+### `01_SOLAR_POTENTIAL_CALCULATOR/` — (v1.0 & v2.0) ✅
+**Stack:** Python, OOP, NumPy
 
-A CLI tool that evaluates solar panel installation viability for residential and commercial properties across 9 Indian cities. Calculates system sizing, energy output, government subsidies (PM Surya Ghar Yojana), GST, accelerated depreciation tax shield, payback period, and LCOE.
+This project evaluates solar panel installation viability for residential and commercial properties across India. It has evolved through two distinct phases:
+- **v1.0 (Pure Python):** Built without external libraries to demonstrate clean algorithmic thinking, factory patterns, and robust OOP architecture.
+- **v2.0 (NumPy Integrated):** A high-performance refactor that introduces **vectorization**, structured arrays, and 25-year lifecycle degradation modeling using NumPy.
 
-This is Version 1.0 — built without libraries to demonstrate clean algorithmic thinking and OOP design. Future versions will replace static data with real ERA5 irradiance and add statistical uncertainty to financial projections.
-
-→ [Project README](01_SOLAR_POTENTIAL_CALCULATOR/README.md)
+→ [Project Evolution README](01_SOLAR_POTENTIAL_CALCULATOR/README.md)
 
 ---
 
@@ -60,7 +60,7 @@ An end-to-end climate risk intelligence platform. Physics-Informed Neural Networ
 
 | Project | Stack | Domain Problem | Status |
 |---|---|---|---|
-| Solar Potential Calculator | Python, OOP | Rooftop solar viability and ROI | ✅ v1.0 complete |
+| Solar Potential Calculator | Python, OOP, NumPy | Rooftop solar viability and ROI | ✅ v1 & v2 complete |
 | Extreme Weather Analyzer | Pandas, NumPy, Xarray | Trend detection in climate extremes | 🔄 Up next |
 | Hydromet Station Database | PostgreSQL, PostGIS | Fragmented station data unification | ⏳ Planned |
 | Climate Signal Detector | SciPy, StatsModels | Statistical significance of climate trends | ⏳ Planned |
