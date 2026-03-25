@@ -15,6 +15,16 @@ def get_int_input(prompt):
             return int(value)
         except ValueError:
             print("Enter numbers only in digits (no special characters)!")
+
+def get_float_input(prompt):
+    while True:
+        value = input(prompt).strip()
+        if value == "":
+            return ""
+        try:
+            return float(value)
+        except ValueError:
+            print("Enter numbers only in digits (no special characters)!")
 #---------------
 #OBJECT CREATORS
 #---------------
@@ -26,8 +36,8 @@ def create_consumer_category_obj(consumer):
         consumer_category_obj=ConsumerCategory("Commercial")
         return consumer_category_obj
     
-def create_solar_system_obj(panel_wattage,number_of_panels,panel_length,panel_width,roof_length,roof_width):
-    solar_system_obj=SolarSystem(panel_wattage,number_of_panels,panel_length,panel_width,roof_length,roof_width)
+def create_solar_system_obj(panel_wattage,number_of_panels,panel_length,panel_width,roof_length,roof_width,month,year):
+    solar_system_obj=SolarSystem(panel_wattage,number_of_panels,panel_length,panel_width,roof_length,roof_width,month,year)
     return solar_system_obj
 
 def create_utils_obj():
@@ -79,10 +89,16 @@ def residential_finance(choice, rf_obj, u_obj):
         print(f'  {u_obj.get_formatted_currency(rf_obj.get_annual_savings())}')
 
     elif choice == '5':
+        print("\nANNUAL SAVINGS IN EACH MONTH IN A YEAR:")
+        savings=rf_obj.get_monthly_savings_in_each_month()
+        for index in range(12):
+            print(f"   {MONTHS[index]} : {u_obj.get_formatted_currency(savings[index])}")
+
+    elif choice == '6':
         print("\nPAYBACK PERIOD:")
         print(f'  {u_obj.get_formatted_time_in_years(rf_obj.get_payback_period())}')
 
-    elif choice == '6':
+    elif choice == '7':
         print("\nTOTAL LIFETIME COST:")
         print(f'  {u_obj.get_formatted_currency(rf_obj.get_total_lifetime_cost())}')
 
@@ -157,14 +173,14 @@ def take_object_inputs():
     print("\nNOW TELL ME ABOUT YOUR LOCATION\n")
     while True:
         city = input("Enter your city name  : ").strip().title()
-        if city in CITY_LATITUDE.keys():
+        if city in CITY["city_name"]:
             break
         else:
             print("SORRY WE HAVE NO INFORMATION ABOUT THIS CITY!")
             continue
     while True:
         state = input("Enter your state name : ").strip().title()
-        if state in STATE_TARIFF.keys():
+        if state in STATE["state_name"]:
             break
         else:
             print("SORRY WE HAVE NO INFORMATION ABOUT THIS STATE!")
@@ -182,29 +198,62 @@ def take_object_inputs():
     number_of_panels = get_int_input("Number of panels          : ")
     if number_of_panels == "":
         return None
-    panel_length = get_int_input("Panel length in metres    : ")
+    panel_length = get_float_input("Panel length in metres    : ")
     if panel_length == "":
         return None
-    panel_width = get_int_input("Panel width in metres     : ")
+    panel_width = get_float_input("Panel width in metres     : ")
     if panel_width == "":
         return None
     print("---" * 30)
 
     # --- Roof dimensions ---
     print("\nNOW TELL ME ABOUT YOUR ROOF DIMENSIONS\n")
-    roof_length = get_int_input("Roof length in metres : ")
+    roof_length = get_float_input("Roof length in metres : ")
     if roof_length == "":
         return None
-    roof_width = get_int_input("Roof width in metres  : ")
+    roof_width = get_float_input("Roof width in metres  : ")
     if roof_width == "":
         return None
 
+    # --- Date specific inputs-----
+    print("\nNOW TELL ME ABOUT THE TIME!\n")
+    while True:
+        print("""Months:
+        1.January
+        2.February
+        3.March
+        4.April
+        5.May
+        6.June
+        7.July
+        8.August
+        9.September
+        10.October
+        11.November
+        12.December""")
+        while True:
+            month=get_int_input("Choose only the number of your month : ")
+            if month in range(1,13):
+                break
+            else: 
+                print("INVALID INPUT!!!")
+                continue
+        while True:           
+            year=get_int_input("Enter your year in digits : ")
+            if year <= 0:
+                print("invalid year entered!!!")
+                continue
+            else:
+                break
+        break
+
     # --- Consumer-specific inputs ---
+    print("\nNOW LETS TAKE SOME CONSUMER SPECIFIC INPUTS! Almost there....\n")
     slab_rate = 0
     gst_input_credit = False
 
     if consumer == 1:
-        slab_rate_pct = get_int_input("Enter your electricity slab rate (just the % number): ")
+        slab_rate_pct = get_float_input("Enter your electricity slab rate (just the % number): ")
         if slab_rate_pct == "":
             return None
         slab_rate = slab_rate_pct / 100
@@ -216,10 +265,12 @@ def take_object_inputs():
 
     # --- Build all objects ---
     utils_obj = create_utils_obj()
+
     solar_system_obj = create_solar_system_obj(
-        panel_wattage, number_of_panels, panel_length, panel_width, roof_length, roof_width
-    )
+        panel_wattage, number_of_panels, panel_length, panel_width, roof_length, roof_width,month,year)
+
     location_obj = create_location_obj(city, state, solar_system_obj, utils_obj)
+
     energy_generation_obj = create_energy_generation_obj(solar_system_obj, location_obj)
 
     residential_obj = None
@@ -250,17 +301,17 @@ def take_object_inputs():
 
 def main():
     # Collect all inputs and build objects once at startup
-    data = take_object_inputs()
-    if data is None:
+    objects = take_object_inputs()
+    if objects is None:
         print("\nExiting. Goodbye!")
         return
 
-    consumer = data["consumer"]
-    solar_system_obj = data["solar_system_obj"]
-    energy_generation_obj = data["energy_generation_obj"]
-    utils_obj = data["utils_obj"]
-    rf_obj = data["residential_finance_obj"]
-    cf_obj = data["commercial_finance_obj"]
+    consumer = objects["consumer"]
+    solar_system_obj = objects["solar_system_obj"]
+    energy_generation_obj = objects["energy_generation_obj"]
+    utils_obj = objects["utils_obj"]
+    rf_obj = objects["residential_finance_obj"]
+    cf_obj = objects["commercial_finance_obj"]
 
     while True:
         print("\n" + "=" * 50)
@@ -305,18 +356,46 @@ def main():
                 print("  2. Daily Energy")
                 print("  3. Monthly Energy")
                 print("  4. Annual Energy")
+                print("  5. Annual Energy in months")
+                print("  6. Lifetime Energy")
+                print("  7. Cumulative Energy Generation In Full Life Cycle")
                 print("  (Press ENTER to go back)")
                 sub = input("Enter choice: ").strip()
                 if sub == "":
                     break
+                
                 if sub == "1":
                     print(f"\n  System Capacity : {energy_generation_obj.calculate_system_capacity()} kW")
+                
                 elif sub == "2":
                     print(f"\n  Daily Energy    : {energy_generation_obj.calculate_daily_energy():.2f} kWh/day")
+                
                 elif sub == "3":
                     print(f"\n  Monthly Energy  : {energy_generation_obj.calculate_monthly_energy():.2f} kWh/month")
+                
                 elif sub == "4":
                     print(f"\n  Annual Energy   : {energy_generation_obj.calculate_annual_energy():.2f} kWh/year")
+                
+                elif sub == "5":
+                    print("\n Annual Energy In Months In An Year  ")
+                    panel_year=get_int_input("Which year of the system's life do you want to see? (Enter 1-25) : ")
+                    energy_array=energy_generation_obj.calculate_annual_energy_in_months(panel_year)
+                    for index in range(0,12):
+                        print(f"\n {MONTHS[index]} : {energy_array[index]} kWh") 
+                    best_month=np.argmax(energy_array)
+                    worst_month=np.argmin(energy_array)
+                    print(f"🌟 Peak Performance: {MONTHS[best_month]} ({energy_array[best_month]:.2f} kWh)")
+                    print(f"☁️ Lowest Generation: {MONTHS[worst_month]} ({energy_array[worst_month]:.2f} kWh)")
+                
+                elif sub == "6":
+                    print("\n Lifetime Energy Considering 0.5% efficiency loss of the Solar Panel:")
+                    energy_array=energy_generation_obj.calculate_lifetime_energy()
+                    for index in range(0,len(energy_array)):
+                        print(f"\n Year {index+1} : {energy_array[index]} kWh") 
+                
+                elif sub == "7":
+                    print(f"\n  Cumulative Energy Generation In Full Life Cycle Considering 0.5% efficiency loss of the Solar Panel   :\n {energy_generation_obj.calculate_cumulative_energy_generation():.2f} kWh")
+                
                 else:
                     print("Invalid selection!")
 
@@ -329,15 +408,16 @@ def main():
                     print("  2. Net Investment (after subsidy)")
                     print("  3. Monthly Savings")
                     print("  4. Annual Savings")
-                    print("  5. Payback Period")
-                    print("  6. Total Lifetime Cost")
-                    print("  7. Levelized Cost of Energy (LCOE)")
-                    print("  8. Lifetime Savings per Unit")
+                    print("  5. Annual Savings In Each Month In A Year")
+                    print("  6. Payback Period")
+                    print("  7. Total Lifetime Cost")
+                    print("  8. Levelized Cost of Energy (LCOE)")
+                    print("  9. Lifetime Savings per Unit")
                     print("  (Press ENTER to go back)")
                     sub = get_int_input("Enter choice: ")
                     if sub == "":
                         break
-                    if 1 <= sub <= 8:
+                    if 1 <= sub <= 9:
                         residential_finance(str(sub), rf_obj, utils_obj)
                     else:
                         print("Invalid selection!")
